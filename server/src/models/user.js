@@ -2,15 +2,11 @@ import mongoose from "mongoose";
 
 const user__schema = new mongoose.Schema(
   {
-    email: { type: String, required: true },
-    username: { type: String, required: true },
+    first_name: { type: String, required: true, lowercase: true },
+    last_name: { type: String, required: true, lowercase: true },
+    email: { type: String, required: true, lowercase: true },
+    username: { type: String, required: true, lowercase: true },
     password: { type: String, required: true },
-    role: { type: String, required: true, default: "default" },
-    avatar: {
-      type: mongoose.Schema.Types.ObjectId,
-      default: null,
-      ref: "image",
-    },
   },
   { timestamps: true }
 );

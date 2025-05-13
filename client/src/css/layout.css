@@ -183,12 +183,27 @@
 .auth-container > h3 {
   margin-bottom: 1rem;
 }
+
+.auth-msg {
+  margin-bottom: 0.5rem;
+  color: rgb(60, 60, 193);
+}
+
+.auth-msg.error {
+  color: rgb(255, 38, 38);
+}
+
 .auth-form button {
   margin: 1rem 0;
 }
 .auth-container a {
   color: rgb(94, 94, 211);
   text-decoration: none;
+}
+
+.auth-container a:hover {
+  text-decoration: underline;
+  cursor: pointer;
 }
 
 .form-item:not(:last-child) {

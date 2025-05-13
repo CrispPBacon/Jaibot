@@ -1,5 +1,7 @@
 import User from "./models/user.js";
-import { loginUser } from "./services/auth.js";
+import { isValidSession, loginUser } from "./services/auth.js";
+import { createNewChat, newMessage } from "./services/chat.js";
+import { UnauthorizedError } from "./utils/errors.js";
 // ! AUTH CONTROLLER
 
 /* POST http://localhost:3000/api/user 
@@ -7,11 +9,11 @@ import { loginUser } from "./services/auth.js";
   User Data E.G:
   {
     "data": {
-        "email": 123email@mail.com,
-        "username": "alsoriano",
-        "password": "Blacks132",
-        "first_name": "Allan",
-        "last_name": "Soriano"
+        "first_name": "Jair Jane",
+        "last_name": "Cruz",
+        "email": "123email@mail.com",
+        "username": "jaijai",
+        "password": "123123"
     }
   }
 */
@@ -28,8 +30,8 @@ export async function createUser(req, res, next) {
 /* POST http://localhost:3000/api/login 
   {
     "data": {
-        "username": "alsoriano",
-        "password": "Blacks132"
+        "username": "jaijai",
+        "password": "123123"
     }
   }
 */
@@ -39,11 +41,21 @@ export async function login(req, res, next) {
     const user = await loginUser(username, password);
     req.session.user_id = user._id;
 
-    const defaultProfilePath =
-      "/uploads/9e43206d-2845-40e3-ae3b-ed15d35e3a96.jfif";
-    const defaultProfileUrl =
-      `${req.protocol}://${req.get("host")}` + defaultProfilePath;
-    if (!user?.avatar) user.avatar = defaultProfileUrl;
+    return res.status(200).json(user);
+  } catch (e) {
+    next(e);
+  }
+}
+
+/* GET http://localhost:3000/api/login */
+export async function refreshAuth(req, res, next) {
+  try {
+    const user = await isValidSession(req.session);
+    if (!user) {
+      req.session.destroy();
+      res.clearCookie("connect.sid");
+      throw new UnauthorizedError("Session invalid or does not exist");
+    }
 
     return res.status(200).json(user);
   } catch (e) {
@@ -57,7 +69,51 @@ export async function logout(req, res, next) {
     req.session.destroy();
     res.clearCookie("connect.sid");
     return res.status(200).json({ msg: "You have logged out" });
-  } catch (error) {
-    next(error);
+  } catch (e) {
+    next(e);
+  }
+}
+
+/* POST http://localhost:3000/api/chat
+    {
+      "data": {
+        "content": "Hey how are you?"
+      }
+    }
+ */
+export async function newConversation(req, res, next) {
+  try {
+    const { content } = req.body.data || {};
+    const user_id = req.session?.user_id;
+    const data = await createNewChat(user_id, content);
+    return res.status(200).json({ data });
+  } catch (e) {
+    next(e);
+  }
+}
+
+/* POST http://localhost:3000/api/chat/:id
+    {
+      "data": {
+        "content": "Hey how are you?"
+      }
+    }
+*/
+export async function sendPrompt(req, res, next) {
+  try {
+    const { id } = req.params;
+    return res.status(200).json({ msg: id });
+  } catch (e) {
+    next(e);
+  }
+}
+
+/* GET http://localhost:3000/api/chat/:id */
+export async function getMessages(req, res, next) {
+  try {
+    const { id } = req.params;
+    return res.status(200).json({ msg: id });
+  } catch (e) {
+    next(e);
   }
 }

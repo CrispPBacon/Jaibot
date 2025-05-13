@@ -1,3 +1,9 @@
+@import url("components.css");
+/* @import url("styles.css"); */
+@import url("layout.css");
+@import url("utilities.css");
+/* @import url("state.css"); */
+
 :root {
   --background-color: #f8f9fa;
   --text-color: #212529;
@@ -5,7 +11,7 @@
   --secondary-color: #000;
   --modal-background: rgba(0, 0, 0, 0.5);
 
-  --sidebar--size: 10rem;
+  --sidebar--size: 17.5rem;
   --sidebar--size-icons: 1rem;
 
   --fs-default: 0.85rem;
@@ -39,6 +45,7 @@ body {
   letter-spacing: 0.5px;
   -webkit-text-size-adjust: 100%;
   -webkit-tap-highlight-color: transparent;
+  /* overflow-y: hidden; */
 }
 
 ul li {

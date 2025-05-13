@@ -4,7 +4,7 @@ import { NotFoundError, UnauthorizedError } from "../utils/errors.js";
 // ! USER CONTROLS
 export async function loginUser(username, password) {
   const userData = await User.findOne({ username })
-    .select("-createdAt -updatedAt -__v -first_name -last_name")
+    .select("-createdAt -updatedAt -__v")
     .lean();
   const userExists = Boolean(userData);
 
@@ -24,10 +24,11 @@ export async function isValidSession(session) {
   if (!session || !session.user_id) return false;
 
   const userData = await User.findById(session.user_id)
-    .select("-password -createdAt -updatedAt -__v -first_name -last_name")
+    .select("-password -createdAt -updatedAt -__v")
     .lean();
   if (!userData) {
     session.destroy();
+    res.clearCookie("connect.sid");
     return false;
   }
 

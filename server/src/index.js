@@ -1,12 +1,10 @@
 import express from "express";
 import cors from "cors";
-import path from "path";
 
 import router from "./route.js";
 
 import { connect } from "./config/db.js";
 import { errorHandlerMiddleware } from "./middlewares/error-handler.js";
-import { dirname } from "./utils/general-utils.js";
 
 import session from "express-session";
 import MongoDBStore from "connect-mongodb-session";
@@ -54,10 +52,9 @@ app.use([
   express.urlencoded({ extended: true }),
   cors(corsConfig),
 ]);
-app.use("/uploads", express.static(path.join(dirname, "..", "..", "uploads")));
 app.use([session(session_config), session_log, router, errorHandlerMiddleware]);
 
-app.listen(PORT, () => {
+app.listen(PORT, HOST, () => {
   console.log(`Server listening at http://${HOST}:${PORT}`);
   connect();
 });

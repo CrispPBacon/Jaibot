@@ -17,6 +17,7 @@ export const validateLogin = [
 export const validateSignUp = [
   isNoActiveSession,
 
+  createFieldValidator(["data.first_name", "data.last_name"], 1),
   createFieldValidator(["data.email"])
     .pop()
     .isEmail()

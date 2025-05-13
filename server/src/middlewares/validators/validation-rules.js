@@ -13,7 +13,10 @@ export function createFieldValidator(
     : [customValidators];
 
   return fieldList.map((field) => {
-    const fieldName = toTitleCase(field.split(".").pop());
+    let fieldName = toTitleCase(field.split(".").pop());
+    fieldName = fieldName.includes("_")
+      ? fieldName.replace("_", " ")
+      : fieldName;
     const validator = body(field)
       .exists()
       .withMessage(`${fieldName} is required`)
