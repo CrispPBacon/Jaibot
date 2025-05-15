@@ -19,7 +19,7 @@
 .sidebar {
   grid-area: sidebar;
   display: grid;
-  grid-template-rows: 1fr 6rem;
+  grid-template-rows: 1fr 10rem;
   overflow-y: auto;
 }
 
@@ -153,6 +153,7 @@
   background-color: #323232d9;
   color: white;
   border-radius: 5px;
+  cursor: pointer;
 }
 
 .conversation-container {
@@ -212,4 +213,14 @@
 
 .form-item button {
   width: 100%;
+}
+
+.profile-img img {
+  width: 3rem;
+  border-radius: 100px;
+  border: 2px solid grey;
+}
+
+.profile-details h6 {
+  margin-left: 1rem;
 }
