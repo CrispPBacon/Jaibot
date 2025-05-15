@@ -1,3 +1,4 @@
+import { checkConversation } from "./validation-chat.js";
 import {
   createFieldValidator,
   handleValidationErrors,
@@ -28,7 +29,8 @@ export const validateSignUp = [
   handleValidationErrors,
 ];
 
-export const validateTopic = [
-  createFieldValidator(["data.title", "data.content"]),
+export const validateConversation = [
+  checkConversation,
+  createFieldValidator(["data.content"], 1),
   handleValidationErrors,
 ];

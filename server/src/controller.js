@@ -1,8 +1,13 @@
 import User from "./models/user.js";
 import { isValidSession, loginUser } from "./services/auth.js";
-import { createNewChat, newMessage } from "./services/chat.js";
+import {
+  createNewChat,
+  getConversations,
+  getMessages,
+  sendPromptRequest,
+} from "./services/chat.js";
 import { UnauthorizedError } from "./utils/errors.js";
-// ! AUTH CONTROLLER
+// ! AUTH CONTROLLER ! //
 
 /* POST http://localhost:3000/api/user 
 
@@ -86,7 +91,7 @@ export async function newConversation(req, res, next) {
     const { content } = req.body.data || {};
     const user_id = req.session?.user_id;
     const data = await createNewChat(user_id, content);
-    return res.status(200).json({ data });
+    return res.status(200).json(data);
   } catch (e) {
     next(e);
   }
@@ -102,17 +107,35 @@ export async function newConversation(req, res, next) {
 export async function sendPrompt(req, res, next) {
   try {
     const { id } = req.params;
-    return res.status(200).json({ msg: id });
+    const user_id = req.session?.user_id;
+    const { content } = req.body.data || {};
+    const response = await sendPromptRequest(user_id, id, content);
+
+    return res.status(200).json(response);
   } catch (e) {
     next(e);
   }
 }
 
 /* GET http://localhost:3000/api/chat/:id */
-export async function getMessages(req, res, next) {
+export async function fetchMessages(req, res, next) {
   try {
     const { id } = req.params;
-    return res.status(200).json({ msg: id });
+    const user_id = req.session?.user_id;
+    const messages = await getMessages(user_id, id);
+
+    return res.status(200).json(messages.reverse());
+  } catch (e) {
+    next(e);
+  }
+}
+
+/* GET http://localhost:3000/api/chat*/
+export async function fetchConversations(req, res, next) {
+  try {
+    const user_id = req.session?.user_id;
+    const data = await getConversations(user_id);
+    return res.status(200).json(data.reverse());
   } catch (e) {
     next(e);
   }

@@ -12,6 +12,8 @@ export default function Signup() {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
+  const [avatar, setAvatar] = useState("");
+
   const [errorMsg, setErrorMsg] = useState(true);
   const [infoMsg, setInfoMsg] = useState("");
 
@@ -27,6 +29,7 @@ export default function Signup() {
       username,
       email,
       password,
+      avatar,
     };
 
     api
@@ -109,6 +112,17 @@ export default function Signup() {
             autoCorrect="off"
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
+          />
+          <input
+            type="text"
+            className="form-control"
+            placeholder="Avatar Image Link Url"
+            autoComplete="off"
+            autoSave="off"
+            autoCorrect="off"
+            value={avatar}
+            onChange={(e) => setAvatar(e.target.value)}
+            style={{ marginTop: "2rem" }}
           />
         </div>
         <div className="form-item">

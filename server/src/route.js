@@ -6,13 +6,16 @@ import {
   refreshAuth,
   newConversation,
   sendPrompt,
-  getMessages,
+  fetchMessages,
+  fetchConversations,
 } from "./controller.js";
 import {
+  validateConversation,
   validateLogin,
   validateSignUp,
 } from "./middlewares/validators/main.js";
 import { verifyAuth } from "./middlewares/auth-handler.js";
+import { checkConversation } from "./middlewares/validators/validation-chat.js";
 
 const router = express.Router();
 
@@ -24,8 +27,12 @@ router.route("/api/user").post(validateSignUp, createUser);
 router.use(verifyAuth);
 
 // ! [AUTH] RELATED ROUTES
-router.route("/api/chat").post(newConversation);
-router.route("/api/chat/:id").post(sendPrompt).get(getMessages);
+router.route("/api/chat").post(newConversation).get(fetchConversations);
+router
+  .route("/api/chat/:id")
+  .post(validateConversation, sendPrompt)
+  .get(checkConversation, fetchMessages);
+
 router.route("/api/logout").delete(logout);
 
 export default router;
